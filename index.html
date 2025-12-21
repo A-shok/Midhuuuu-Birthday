@@ -58,7 +58,6 @@ body{
     url("bg.jpg") center/cover no-repeat;
   color:white;
 }
-
 #wishPage h1{
   font-size:36px;
 }
@@ -96,7 +95,6 @@ body{
   border-radius:20px;
   color:#333;
 }
-
 .card img{
   width:100%;
   height:220px;
@@ -159,7 +157,7 @@ button{
   <div id="micStatus">Tap and blow gently 💨</div>
 </div>
 
-<!-- DARK SCREEN (EMPTY) -->
+<!-- DARK SCREEN -->
 <div id="darkScreen" class="center"></div>
 
 <!-- WISH PAGE -->
@@ -180,17 +178,17 @@ button{
 "use strict";
 
 /* ELEMENTS */
-const loginDiv=document.getElementById("login");
-const candleDiv=document.getElementById("candlePage");
-const darkDiv=document.getElementById("darkScreen");
-const wishDiv=document.getElementById("wishPage");
-const birthdayDiv=document.getElementById("birthday");
-const errorDiv=document.getElementById("error");
-const candlesEl=document.getElementById("candles");
-const micStatusEl=document.getElementById("micStatus");
-const slide=document.getElementById("slide");
-const textEl=document.getElementById("text");
-const music=document.getElementById("music");
+const loginDiv = document.getElementById("login");
+const candleDiv = document.getElementById("candlePage");
+const darkDiv = document.getElementById("darkScreen");
+const wishDiv = document.getElementById("wishPage");
+const birthdayDiv = document.getElementById("birthday");
+const errorDiv = document.getElementById("error");
+const candlesEl = document.getElementById("candles");
+const micStatusEl = document.getElementById("micStatus");
+const slide = document.getElementById("slide");
+const textEl = document.getElementById("text");
+const music = document.getElementById("music");
 
 /* LOGIN */
 const USERNAME="midhuuuu";
@@ -203,31 +201,44 @@ function doLogin(){
   } else errorDiv.innerText="Try again 😉";
 }
 
-/* MIC */
+/* MOBILE-SAFE MIC BLOW */
 let audioContext, analyser, mic, blown=false;
 
 function startMic(){
-  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
-    audioContext=new AudioContext();
-    analyser=audioContext.createAnalyser();
-    mic=audioContext.createMediaStreamSource(stream);
+  navigator.mediaDevices.getUserMedia({ audio:true }).then(stream=>{
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioContext.resume();
+
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+
+    mic = audioContext.createMediaStreamSource(stream);
     mic.connect(analyser);
-    analyser.fftSize=256;
+
     micStatusEl.innerText="Blow now 💨";
     detectBlow(stream);
+  }).catch(()=>{
+    micStatusEl.innerText="Allow microphone 🎤";
   });
 }
 
 function detectBlow(stream){
-  const data=new Uint8Array(analyser.frequencyBinCount);
+  const buffer = new Uint8Array(analyser.fftSize);
+
   function check(){
     if(blown) return;
-    analyser.getByteFrequencyData(data);
-    let volume=data.reduce((a,b)=>a+b)/data.length;
-    if(volume>35){
-      blown=true;
+
+    analyser.getByteTimeDomainData(buffer);
+    let sum = 0;
+    for(let i=0;i<buffer.length;i++){
+      sum += Math.abs(buffer[i] - 128);
+    }
+    let volume = sum / buffer.length;
+
+    if(volume > 8){   // 📱 Phone-friendly
+      blown = true;
       candlesEl.innerText="💨";
-      stream.getTracks().forEach(t=>t.stop());
+      stream.getTracks().forEach(t=>t.stop()); // MIC OFF
       setTimeout(showDark,800);
       return;
     }

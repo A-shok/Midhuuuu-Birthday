@@ -6,45 +6,84 @@
 <title>Happy Birthday Midhuuuu 💕</title>
 
 <style>
+/* FULL STORY SIZE */
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
-  overflow-x: hidden;
-}
-
-/* CENTER */
-.center {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  text-align: center;
+  background: black;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* STORY FRAME */
+.story {
+  width: 100%;
+  max-width: 420px;
+  height: 100vh;
+  background:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+    url("bg.jpg") center/cover no-repeat;
+  position: relative;
   color: white;
 }
 
-/* TITLE */
+/* FIRST SCREEN */
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 h1 {
-  font-size: 38px;
+  font-size: 36px;
   animation: glow 2s infinite alternate;
 }
 
 @keyframes glow {
   from { text-shadow: 0 0 10px #fff; }
-  to { text-shadow: 0 0 25px #ff4b5c; }
+  to { text-shadow: 0 0 30px #ff4b5c; }
 }
 
-/* BUTTON */
 button {
   margin-top: 25px;
   padding: 14px 30px;
   border: none;
   border-radius: 30px;
-  font-size: 16px;
   background: #ff4b5c;
   color: white;
+  font-size: 16px;
   cursor: pointer;
+}
+
+/* SECOND SCREEN */
+#content {
+  display: none;
+  padding: 20px;
+}
+
+.card {
+  background: rgba(255,255,255,0.95);
+  color: #333;
+  border-radius: 20px;
+  padding: 15px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* SLIDESHOW */
+img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin: 10px 0;
 }
 
 /* HEARTS */
@@ -59,70 +98,40 @@ button {
   from { transform: translateY(0); opacity: 1; }
   to { transform: translateY(-100vh); opacity: 0; }
 }
-
-/* HIDDEN CONTENT */
-#content {
-  display: none;
-  text-align: center;
-  padding: 20px;
-}
-
-.card {
-  background: white;
-  border-radius: 20px;
-  padding: 20px;
-  max-width: 400px;
-  margin: auto;
-}
-
-/* SLIDESHOW */
-img {
-  width: 100%;
-  height: 230px;
-  object-fit: cover;
-  border-radius: 15px;
-  margin: 15px 0;
-}
 </style>
 </head>
 
 <body>
+
+<div class="story">
 
 <!-- MUSIC -->
 <audio id="music" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
-<!-- VOICE -->
-<audio id="voice">
-  <source src="voice.mp3" type="audio/mpeg">
-</audio>
-
 <!-- FIRST SCREEN -->
 <div class="center" id="first">
   <h1>🎉 Happy Birthday <br> Midhuuuu 💕</h1>
-  <button onclick="startLove()">Tap for Surprise 💖</button>
+  <button onclick="startStory()">Tap for Surprise 💖</button>
 </div>
 
 <!-- SECOND SCREEN -->
 <div id="content">
   <div class="card">
-    <h2>To my best friend 💖</h2>
-
+    <h3>To my best friend 💖</h3>
     <img id="slide" src="img1.jpg">
-
     <p>
       You are my safe place, my laughter,  
-      and my forever person 🤍  
-      I’m so grateful for you.
+      and my forever person 🤍
     </p>
-
-    <button onclick="playVoice()">🎤 Hear My Voice</button>
   </div>
 </div>
 
+</div>
+
 <script>
-/* HEARTS */
+/* FLOATING HEARTS */
 setInterval(() => {
   const heart = document.createElement("div");
   heart.className = "heart";
@@ -130,10 +139,10 @@ setInterval(() => {
   heart.style.left = Math.random() * 100 + "vw";
   document.body.appendChild(heart);
   setTimeout(() => heart.remove(), 6000);
-}, 300);
+}, 350);
 
-/* START LOVE */
-function startLove() {
+/* START STORY */
+function startStory() {
   document.getElementById("first").style.display = "none";
   document.getElementById("content").style.display = "block";
   document.getElementById("music").play();
@@ -141,7 +150,7 @@ function startLove() {
 }
 
 /* SLIDESHOW */
-const images = ["img1.jpg","img2.jpg"];
+const images = ["img1.jpg", "img2.jpg","img3.jpg];
 let i = 0;
 setInterval(() => {
   i = (i + 1) % images.length;
@@ -153,29 +162,25 @@ function confettiBlast() {
   for (let i = 0; i < 100; i++) {
     const c = document.createElement("div");
     c.style.position = "fixed";
-    c.style.left = Math.random()*100+"vw";
+    c.style.left = Math.random() * 100 + "vw";
     c.style.top = "-10px";
     c.style.width = "8px";
     c.style.height = "8px";
-    c.style.background = ["#ff4b5c","#ffd1dc","#fff"][Math.floor(Math.random()*3)];
+    c.style.background =
+      ["#ff4b5c","#ffd1dc","#fff"][Math.floor(Math.random()*3)];
     c.style.animation = "fall 3s linear";
     document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+    setTimeout(() => c.remove(), 3000);
   }
 }
 
-document.head.insertAdjacentHTML("beforeend",`
+document.head.insertAdjacentHTML("beforeend", `
 <style>
 @keyframes fall {
   to { transform: translateY(100vh); opacity:0; }
 }
 </style>
 `);
-
-/* VOICE */
-function playVoice() {
-  document.getElementById("voice").play();
-}
 </script>
 
 </body>

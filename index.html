@@ -71,21 +71,22 @@ button:hover{
 </div>
 
 <script>
-const images=["img1.jpg","img2.jpg"];
-let i=0;
+const images = ["img1.jpg", "img2.jpg"];
+let i = 0;
 
-setInterval(()=>{
-  i=(i+1)%images.length;
-  document.getElementById("slide").src="images/img1.jpg";
+setInterval(() => {
+  i = (i + 1) % images.length;
+  document.getElementById("slide").src = images[i];
+}, 3000);
 
-},3000);
-
-function playAll(){
+function playAll() {
   document.getElementById("music").play();
   alert("Happy Birthday 💖");
 }
 </script>
 
+
 </body>
 </html>
+
 

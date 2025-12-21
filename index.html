@@ -24,7 +24,10 @@ body{
 }
 
 /* LOGIN */
-#login{background:#000;color:white}
+#login{
+  background:#000;
+  color:white;
+}
 
 /* CANDLE PAGE */
 #candlePage{
@@ -46,11 +49,13 @@ body{
 #countdown{
   font-size:32px;
   margin-top:10px;
-  letter-spacing:6px;
 }
 
 /* DARK SCREEN */
-#darkScreen{display:none;background:#000}
+#darkScreen{
+  display:none;
+  background:#000;
+}
 
 /* WISH PAGE */
 #wishPage{
@@ -60,7 +65,9 @@ body{
     url("bg.jpg") center/cover no-repeat;
   color:white;
 }
-#wishPage h1{font-size:36px}
+#wishPage h1{
+  font-size:36px;
+}
 
 .glow-btn{
   margin-top:25px;
@@ -78,7 +85,7 @@ body{
   to{box-shadow:0 0 30px #ff9a9e}
 }
 
-/* SLIDESHOW */
+/* SLIDESHOW PAGE */
 #birthday{
   display:none;
   background:
@@ -87,6 +94,7 @@ body{
   color:white;
   overflow-y:auto;
 }
+
 .card{
   background:rgba(255,255,255,.97);
   max-width:420px;
@@ -176,16 +184,17 @@ button{
 <script>
 "use strict";
 
-/* ELEMENTS */
-const loginDiv = login;
-const candleDiv = candlePage;
-const darkDiv = darkScreen;
-const wishDiv = wishPage;
-const birthdayDiv = birthday;
-const candlesEl = candles;
-const countdownEl = countdown;
-const slide = slide;
-const textEl = text;
+/* ELEMENTS (FIXED) */
+const loginDiv = document.getElementById("login");
+const candleDiv = document.getElementById("candlePage");
+const darkDiv = document.getElementById("darkScreen");
+const wishDiv = document.getElementById("wishPage");
+const birthdayDiv = document.getElementById("birthday");
+const candlesEl = document.getElementById("candles");
+const countdownEl = document.getElementById("countdown");
+const slide = document.getElementById("slide");
+const textEl = document.getElementById("text");
+const errorDiv = document.getElementById("error");
 const music = document.getElementById("music");
 
 /* LOGIN */
@@ -193,21 +202,26 @@ const USERNAME="midhuuuu";
 const PASSWORD="forever";
 
 function doLogin(){
-  if(username.value.trim()===USERNAME && password.value.trim()===PASSWORD){
+  if(
+    document.getElementById("username").value.trim()===USERNAME &&
+    document.getElementById("password").value.trim()===PASSWORD
+  ){
     loginDiv.style.display="none";
     candleDiv.style.display="flex";
-  } else error.innerText="Try again 😉";
+  } else {
+    errorDiv.innerText="Try again 😉";
+  }
 }
 
 /* CANDLE + COUNTDOWN */
 function blowCandles(){
-  let count = 3;
-  countdownEl.innerText = count;
+  let count=3;
+  countdownEl.innerText=count;
 
-  const timer = setInterval(()=>{
+  const timer=setInterval(()=>{
     count--;
     if(count>0){
-      countdownEl.innerText = count;
+      countdownEl.innerText=count;
     } else {
       clearInterval(timer);
       candlesEl.style.animation="none";

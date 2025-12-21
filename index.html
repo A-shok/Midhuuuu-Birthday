@@ -11,11 +11,12 @@ body {
   font-family: 'Segoe UI', sans-serif;
   min-height: 100vh;
   background:
-    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url("bg.jpg") center/cover no-repeat;
+  overflow-x: hidden;
 }
 
-/* FIRST PAGE */
+/* ---------- FIRST PAGE ---------- */
 .first {
   height: 100vh;
   display: flex;
@@ -28,6 +29,12 @@ body {
 
 .first h1 {
   font-size: 38px;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 28px #ff4b5c; }
 }
 
 button {
@@ -41,14 +48,14 @@ button {
   cursor: pointer;
 }
 
-/* SECOND PAGE */
+/* ---------- SECOND PAGE ---------- */
 #second {
   display: none;
   padding: 30px 0;
 }
 
 .card {
-  background: rgba(255,255,255,0.96);
+  background: rgba(255,255,255,0.97);
   max-width: 420px;
   margin: auto;
   padding: 20px;
@@ -56,18 +63,37 @@ button {
   text-align: center;
 }
 
+/* Slideshow with fade */
 .card img {
   width: 100%;
   height: 240px;
   object-fit: cover;
   border-radius: 15px;
   margin-bottom: 15px;
+  opacity: 1;
+  transition: opacity 1s ease-in-out;
 }
 
+/* Text */
 .card p {
   font-size: 15px;
   line-height: 1.6;
   color: #333;
+  min-height: 180px;
+}
+
+/* Floating hearts */
+.heart {
+  position: fixed;
+  bottom: -10px;
+  font-size: 20px;
+  animation: floatUp 6s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(0); opacity: 1; }
+  to { transform: translateY(-100vh); opacity: 0; }
 }
 </style>
 </head>
@@ -82,51 +108,84 @@ button {
 <!-- FIRST PAGE -->
 <div class="first" id="first">
   <h1>🎉 Happy Birthday <br> Midhuuuu 💕</h1>
-  <button onclick="goSecond()">With Love 💖Ashoooo🫶🏻</button>
+  <button onclick="goSecond()">With Love 💖 Ashoooo 🫶🏻</button>
 </div>
 
 <!-- SECOND PAGE -->
 <div id="second">
   <div class="card">
     <img id="slide" src="img1.jpg">
-
-    <p>
-      Thanks for coming into my life as one of biggest supporter and best nd sweet and cute friend forever, <br>
-      Midhuuuu you are my safe place, my comfort zone lusu, <br>
-      and my forever person 💖 eppovum ena vitu poidatha pleasee🥺🥺 <br><br>
-      I’m so grateful for you. 
-      Hey my sugar plum❤️ 
-      intha careless boy cares you lot and loves you lotttt💞💝
-      Love you midhuuuu❤️🫂
-    </p>
+    <p id="typedText"></p>
   </div>
 </div>
 
 <script>
-/* SLIDESHOW IMAGES */
+/* ---------- SLIDESHOW ---------- */
 const images = ["img1.jpg", "img2.jpg", "img3.jpg"];
 let index = 0;
 let slideshowInterval;
+const slide = document.getElementById("slide");
 
-/* BUTTON CLICK */
+function startSlideshow() {
+  slideshowInterval = setInterval(() => {
+    slide.style.opacity = 0;
+    setTimeout(() => {
+      index = (index + 1) % images.length;
+      slide.src = images[index];
+      slide.style.opacity = 1;
+    }, 800);
+  }, 4000);
+}
+
+/* ---------- TYPING EFFECT ---------- */
+const message = `
+Thanks for coming into my life as one of the biggest supporters and best,
+sweet and cute friend forever 💕
+
+Midhuuuu you are my safe place, my comfort zone lusu 🫶🏻
+and my forever person 💖 eppovum ena vitu poidatha pleasee 🥺🥺
+
+I’m so grateful for you.
+Hey my sugar plum ❤️
+intha careless boy cares you lot and loves you lotttt 💞💝
+Love you midhuuuu ❤️🫂
+`;
+
+let charIndex = 0;
+function startTyping() {
+  const el = document.getElementById("typedText");
+  el.innerHTML = "";
+  charIndex = 0;
+  const typing = setInterval(() => {
+    el.innerHTML += message.charAt(charIndex);
+    charIndex++;
+    if (charIndex >= message.length) clearInterval(typing);
+  }, 35);
+}
+
+/* ---------- FLOATING HEARTS ---------- */
+function startHearts() {
+  setInterval(() => {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 6000);
+  }, 300);
+}
+
+/* ---------- BUTTON CLICK ---------- */
 function goSecond() {
   document.getElementById("first").style.display = "none";
   document.getElementById("second").style.display = "block";
   document.getElementById("music").play();
-  startSlideshow();
-}
 
-/* SLIDESHOW – 4 SECOND GAP */
-function startSlideshow() {
-  slideshowInterval = setInterval(() => {
-    index = (index + 1) % images.length;
-    document.getElementById("slide").src = images[index];
-  }, 4000);
+  startSlideshow();
+  startTyping();
+  startHearts();
 }
 </script>
 
 </body>
 </html>
-
-
-

@@ -34,12 +34,13 @@ body{
 }
 #candles{
   font-size:70px;
-  margin-bottom:15px;
+  margin-bottom:20px;
   animation:flicker .25s infinite alternate;
+  transition:opacity 1.5s ease;
 }
 @keyframes flicker{
-  from{transform:rotate(-1deg);text-shadow:0 0 8px orange}
-  to{transform:rotate(1deg);text-shadow:0 0 15px gold}
+  from{transform:rotate(-1deg);text-shadow:0 0 6px orange}
+  to{transform:rotate(1deg);text-shadow:0 0 14px gold}
 }
 
 /* DARK SCREEN */
@@ -56,8 +57,11 @@ body{
     url("bg.jpg") center/cover no-repeat;
   color:white;
 }
-#wishPage h1{font-size:36px}
+#wishPage h1{
+  font-size:36px;
+}
 
+/* GLOW BUTTON */
 .glow-btn{
   margin-top:25px;
   padding:14px 36px;
@@ -95,7 +99,19 @@ body{
   height:220px;
   object-fit:cover;
   border-radius:15px;
-  transition:opacity 1s;
+  transition:opacity 1s, box-shadow .5s;
+}
+
+/* HEART PULSE */
+.heart{
+  font-size:26px;
+  margin-top:10px;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.3)}
+  100%{transform:scale(1)}
 }
 
 /* INPUT + BUTTON */
@@ -131,9 +147,7 @@ button{
 
 <body>
 
-<audio id="music" loop>
-  <source src="music.mp3">
-</audio>
+<audio id="music" loop></audio>
 
 <!-- LOGIN -->
 <div id="login" class="center">
@@ -148,7 +162,7 @@ button{
 <!-- CANDLE PAGE -->
 <div id="candlePage" class="center">
   <div id="candles">🕯️🕯️🕯️</div>
-  <button id="blowBtn">Blow the candles 🎤</button>
+  <button id="blowBtn">Blow now</button>
 </div>
 
 <!-- DARK SCREEN -->
@@ -157,13 +171,14 @@ button{
 <!-- WISH PAGE -->
 <div id="wishPage" class="center">
   <h1>🎉 Happy Birthday <br> Midhuuuu 🫶🏻❤️</h1>
-  <button class="glow-btn" id="loveBtn">With love Ashoooo ❣️🫶🏻</button>
+  <button class="glow-btn" id="loveBtn">With love Ashoooo 🫶🏻</button>
 </div>
 
 <!-- SLIDESHOW PAGE -->
 <div id="birthday" class="center">
   <div class="card">
     <img id="slide" src="img1.jpg">
+    <div class="heart">💓</div>
     <p id="text"></p>
   </div>
 </div>
@@ -187,26 +202,24 @@ const music = document.getElementById("music");
 const USERNAME="midhuuuu";
 const PASSWORD="forever";
 
-document.getElementById("loginBtn").addEventListener("click", ()=>{
-  if(
-    document.getElementById("username").value.trim()===USERNAME &&
-    document.getElementById("password").value.trim()===PASSWORD
-  ){
+document.getElementById("loginBtn").addEventListener("click",()=>{
+  if(username.value.trim()===USERNAME && password.value.trim()===PASSWORD){
     loginDiv.style.display="none";
     candleDiv.style.display="flex";
-  } else {
-    errorDiv.innerText="Try again 😉";
-  }
+  } else errorDiv.innerText="Try again 😉";
 });
 
-/* BLOW CANDLES – MOBILE SAFE */
-document.getElementById("blowBtn").addEventListener("click", ()=>{
-  document.getElementById("blowBtn").disabled = true;
+/* CANDLE BLOW */
+document.getElementById("blowBtn").addEventListener("click",()=>{
+  document.getElementById("blowBtn").disabled=true;
 
   setTimeout(()=>{
-    candlesEl.style.animation="none";
-    candlesEl.innerText="💨";
-    setTimeout(showDark,800);
+    candlesEl.style.opacity="0";
+    setTimeout(()=>{
+      candlesEl.innerText="💨";
+      candlesEl.style.opacity="1";
+      setTimeout(showDark,800);
+    },1500);
   },3000);
 });
 
@@ -221,14 +234,27 @@ function showDark(){
 }
 
 /* WISH → SLIDESHOW */
-document.getElementById("loveBtn").addEventListener("click", ()=>{
+document.getElementById("loveBtn").addEventListener("click",()=>{
   wishDiv.style.display="none";
   birthdayDiv.style.display="flex";
-  music.play();
+  fadeInMusic();
   startSlideshow();
   startTyping();
   startEmojiRain();
 });
+
+/* MUSIC FADE-IN */
+music.src="music.mp3";
+music.volume=0;
+function fadeInMusic(){
+  music.play();
+  let v=0;
+  const fade=setInterval(()=>{
+    v+=0.05;
+    music.volume=Math.min(v,1);
+    if(v>=1)clearInterval(fade);
+  },200);
+}
 
 /* SLIDESHOW */
 const imgs=["img1.jpg","img2.jpg","img3.jpg"];
@@ -240,6 +266,8 @@ function startSlideshow(){
       i=(i+1)%imgs.length;
       slide.src=imgs[i];
       slide.style.opacity=1;
+      slide.style.boxShadow="0 0 25px #ff4b5c";
+      setTimeout(()=>slide.style.boxShadow="none",800);
     },800);
   },4000);
 }

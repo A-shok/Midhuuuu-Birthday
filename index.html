@@ -1,7 +1,210 @@
-<script>
-document.addEventListener("DOMContentLoaded", function () {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Midhuuuu 💕</title>
 
-  /* ELEMENTS */
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:#000;
+  overflow:hidden;
+}
+
+/* COMMON */
+.center{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+/* LOGIN */
+#login{
+  background:#000;
+  color:white;
+}
+
+/* CANDLE PAGE */
+#candlePage{
+  display:none;
+  background:#000;
+  color:#ff9a9e;
+}
+#candles{
+  font-size:70px;
+  margin-bottom:20px;
+  animation:flicker .25s infinite alternate;
+  transition:all 1.5s ease;
+}
+@keyframes flicker{
+  from{transform:rotate(-1deg);text-shadow:0 0 6px orange}
+  to{transform:rotate(1deg);text-shadow:0 0 14px gold}
+}
+
+/* DARK SCREEN */
+#darkScreen{
+  display:none;
+  background:#000;
+}
+
+/* WISH PAGE */
+#wishPage{
+  display:none;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+}
+#wishPage h1{font-size:36px}
+
+/* GLOW BUTTON */
+.glow-btn{
+  margin-top:25px;
+  padding:14px 36px;
+  border:none;
+  border-radius:30px;
+  font-size:16px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+  animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{box-shadow:0 0 10px #ff4b5c}
+  to{box-shadow:0 0 30px #ff9a9e}
+}
+
+/* SLIDESHOW PAGE */
+#birthday{
+  display:none;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+}
+.card{
+  background:rgba(255,255,255,.97);
+  max-width:420px;
+  padding:20px;
+  border-radius:20px;
+  color:#333;
+}
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:15px;
+  transition:opacity 1s, box-shadow .6s;
+}
+
+/* HEART */
+.heart{
+  font-size:26px;
+  margin:10px 0;
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.3)}
+  100%{transform:scale(1)}
+}
+
+/* SECRET BUTTON */
+#secretBtn{
+  display:none;
+  margin-top:15px;
+  padding:12px 28px;
+  border:none;
+  border-radius:25px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+}
+
+/* SECRET PAGE */
+#secretPage{
+  display:none;
+  background:
+    linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+  padding:30px;
+}
+
+/* INPUTS */
+input{
+  width:220px;
+  padding:12px;
+  margin:6px;
+  border-radius:25px;
+  border:none;
+  text-align:center;
+}
+button{
+  padding:12px 30px;
+  border:none;
+  border-radius:30px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+  margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop src="music.mp3"></audio>
+
+<!-- LOGIN -->
+<div id="login" class="center">
+  <h2>🔐 Enter to see your surprise 💝</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <div style="font-size:13px;opacity:.8;">Hint: It’s your nickname 😉</div>
+  <button id="loginBtn">Continue 💖</button>
+  <div id="error"></div>
+</div>
+
+<!-- CANDLE PAGE -->
+<div id="candlePage" class="center">
+  <div id="candles">🕯️🕯️🕯️</div>
+  <button id="blowBtn">Blow now</button>
+</div>
+
+<!-- DARK SCREEN -->
+<div id="darkScreen" class="center"></div>
+
+<!-- WISH PAGE -->
+<div id="wishPage" class="center">
+  <h1>🎉 Happy Birthday <br> Midhuuuu 🫶🏻❤️</h1>
+  <button class="glow-btn" id="loveBtn">With love Ashoooo 🫶🏻</button>
+</div>
+
+<!-- SLIDESHOW PAGE -->
+<div id="birthday" class="center">
+  <div class="card">
+    <img id="slide" src="img1.jpg">
+    <div class="heart">💓</div>
+    <p id="text"></p>
+    <button id="secretBtn">Secret Message 💌</button>
+  </div>
+</div>
+
+<!-- SECRET PAGE -->
+<div id="secretPage" class="center">
+  <h2>💌 My Secret for You</h2>
+  <p id="secretText"></p>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
   const loginDiv = document.getElementById("login");
   const candleDiv = document.getElementById("candlePage");
   const darkDiv = document.getElementById("darkScreen");
@@ -9,48 +212,37 @@ document.addEventListener("DOMContentLoaded", function () {
   const birthdayDiv = document.getElementById("birthday");
   const secretDiv = document.getElementById("secretPage");
 
-  const usernameInput = document.getElementById("username");
-  const passwordInput = document.getElementById("password");
-  const errorDiv = document.getElementById("error");
-
-  const candlesEl = document.getElementById("candles");
-  const slide = document.getElementById("slide");
-  const textEl = document.getElementById("text");
-  const secretBtn = document.getElementById("secretBtn");
-  const secretText = document.getElementById("secretText");
+  const username = document.getElementById("username");
+  const password = document.getElementById("password");
+  const error = document.getElementById("error");
 
   const loginBtn = document.getElementById("loginBtn");
   const blowBtn = document.getElementById("blowBtn");
   const loveBtn = document.getElementById("loveBtn");
+  const secretBtn = document.getElementById("secretBtn");
+
+  const candles = document.getElementById("candles");
+  const slide = document.getElementById("slide");
+  const text = document.getElementById("text");
+  const secretText = document.getElementById("secretText");
   const music = document.getElementById("music");
 
-  /* SAFETY CHECK */
-  if (!loginBtn || !blowBtn || !loveBtn) {
-    alert("HTML IDs missing. Please re-check button IDs.");
-    return;
-  }
-
-  /* LOGIN */
   const USERNAME = "midhuuuu";
   const PASSWORD = "forever";
 
-  loginBtn.addEventListener("click", () => {
-    if (
-      usernameInput.value.trim() === USERNAME &&
-      passwordInput.value.trim() === PASSWORD
-    ) {
+  loginBtn.onclick = () => {
+    if(username.value === USERNAME && password.value === PASSWORD){
       loginDiv.style.display = "none";
       candleDiv.style.display = "flex";
     } else {
-      errorDiv.innerText = "Try again 😉";
+      error.innerText = "Try again 😉";
     }
-  });
+  };
 
-  /* CANDLE */
-  blowBtn.addEventListener("click", () => {
+  blowBtn.onclick = () => {
     blowBtn.disabled = true;
     candleDiv.style.background = "#fff";
-    candlesEl.style.color = "#ff9a00";
+    candles.style.color = "#ff9a00";
 
     setTimeout(() => {
       candleDiv.style.display = "none";
@@ -62,33 +254,31 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 3000);
 
     }, 3000);
-  });
+  };
 
-  /* WISH → SLIDESHOW */
-  loveBtn.addEventListener("click", () => {
+  loveBtn.onclick = () => {
     wishDiv.style.display = "none";
     birthdayDiv.style.display = "flex";
     fadeInMusic();
     startTyping();
     startSlideshow();
-  });
+  };
 
-  /* MUSIC */
-  function fadeInMusic() {
+  function fadeInMusic(){
     music.volume = 0;
     music.play();
     let v = 0;
     const fade = setInterval(() => {
       v += 0.05;
       music.volume = Math.min(v, 1);
-      if (v >= 1) clearInterval(fade);
+      if(v >= 1) clearInterval(fade);
     }, 200);
   }
 
-  /* SLIDESHOW */
-  const images = ["img1.jpg", "img2.jpg", "img3.jpg"];
+  const images = ["img1.jpg","img2.jpg","img3.jpg"];
   let index = 0;
-  function startSlideshow() {
+
+  function startSlideshow(){
     setInterval(() => {
       slide.style.opacity = 0;
       setTimeout(() => {
@@ -99,14 +289,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 4000);
   }
 
-  /* TYPING */
   const message = `Thanks for coming into my life .
 ni enaku one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻
 Thanks for being with me❣️
 
 Midhuuuu you are my safe place and my comfort zone lusu 💖
-and my forever person ❤️ 
+and my forever person ❤️
 eppovum ena vitu poidatha pleasee 🥺🥺
 
 I’m so grateful for you.
@@ -114,23 +303,21 @@ Hey my sugar plum 🥰❤️
 intha careless boy cares you lot and loves you lotttt 💞💝
 Love you midhuuuu ❤️🫂`;
 
-  function startTyping() {
-    textEl.innerHTML = "";
+  function startTyping(){
+    text.innerHTML = "";
     let i = 0;
     const typing = setInterval(() => {
-      textEl.innerHTML += message.charAt(i++);
-      if (i >= message.length) {
+      text.innerHTML += message.charAt(i++);
+      if(i >= message.length){
         clearInterval(typing);
         secretBtn.style.display = "inline-block";
       }
     }, 40);
   }
 
-  /* SECRET */
-  secretBtn.addEventListener("click", () => {
+  secretBtn.onclick = () => {
     birthdayDiv.style.display = "none";
     secretDiv.style.display = "flex";
-
     secretText.innerText =
 `Midhuuuuu,
 
@@ -141,7 +328,10 @@ I am always there for you.
 You are never alone.
 
 Ashooo iruken, irupen epovum 💖`;
-  });
+  };
 
 });
 </script>
+
+</body>
+</html>

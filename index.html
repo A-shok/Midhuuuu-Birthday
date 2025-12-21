@@ -9,30 +9,31 @@
 body{
   margin:0;
   font-family:'Segoe UI',sans-serif;
-  min-height:100vh;
-  background:
-    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
-    url("bg.jpg") center/cover no-repeat;
-  overflow-x:hidden;
+  background:#000;
+  overflow:hidden;
 }
 
-/* COMMON */
-.center{text-align:center;color:white}
-
-/* LOGIN / FIRST / SECOND */
-#login,.first,#second{
+/* COMMON CENTER */
+.center{
   min-height:100vh;
-  display:none;
+  display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  text-align:center;
 }
-#login{display:flex}
 
+/* LOGIN */
+#login{
+  background:
+    linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+}
 input{
   width:220px;
   padding:12px;
-  margin:6px 0;
+  margin:6px;
   border-radius:25px;
   border:none;
   text-align:center;
@@ -47,84 +48,56 @@ button{
   margin-top:12px;
 }
 
-/* FIRST PAGE */
-.first h1{
-  font-size:38px;
-  animation:glow 2s infinite alternate;
+/* CANDLE PAGE */
+#candlePage{
+  display:none;
+  background:#000;
+  color:#ffd1dc;
 }
-@keyframes glow{
-  from{ text-shadow:0 0 10px #fff;}
-  to{ text-shadow:0 0 30px #ff4b5c;}
+#candles{
+  font-size:70px;
+  margin-bottom:20px;
+}
+#micStatus{
+  font-size:14px;
+  margin-top:10px;
 }
 
-/* CARD */
+/* DARK SCREEN */
+#darkScreen{
+  display:none;
+  background:#000;
+  color:white;
+  font-size:24px;
+}
+
+/* BIRTHDAY PAGE */
+#birthday{
+  display:none;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+  overflow-y:auto;
+}
+
 .card{
   background:rgba(255,255,255,.97);
   max-width:420px;
   padding:20px;
   border-radius:20px;
   color:#333;
-  text-align:center;
 }
 
-/* SLIDESHOW */
 .card img{
   width:100%;
   height:220px;
   object-fit:cover;
   border-radius:15px;
-  transition:opacity 1s, box-shadow .3s;
+  transition:opacity 1s;
 }
 
-/* TEXT */
-.card p{
-  font-size:15px;
-  line-height:1.6;
-  min-height:170px;
-}
-
-/* CAKE */
-#cake{
-  font-size:80px;
-  cursor:pointer;
-}
-#cakeMsg{display:none;color:#d81b60}
-
-/* CANDLES */
-#candles{font-size:50px}
-#blowMsg{display:none;color:#ff4b5c}
-
-/* TIMELINE */
-.timeline{
-  text-align:left;
-  font-size:14px;
-  margin-top:10px;
-}
-
-/* GIFT */
-#giftBox{
-  font-size:70px;
-  cursor:pointer;
-  animation:shake 2s infinite;
-}
-@keyframes shake{
-  0%,100%{transform:rotate(0)}
-  25%{transform:rotate(-5deg)}
-  75%{transform:rotate(5deg)}
-}
-#giftMessage{
-  display:none;
-  font-size:16px;
-  color:#d81b60;
-  margin-top:15px;
-  animation:fadeIn 2s forwards;
-}
-@keyframes fadeIn{
-  from{opacity:0;transform:scale(.8)}
-  to{opacity:1;transform:scale(1)}
-}
-
-/* EMOJI RAIN */
+/* EMOJIS */
 .emoji{
   position:fixed;
   bottom:-20px;
@@ -132,17 +105,6 @@ button{
 }
 @keyframes floatUp{
   to{transform:translateY(-110vh);opacity:0}
-}
-
-/* CONFETTI */
-.confetti{
-  position:fixed;
-  width:8px;
-  height:8px;
-  animation:fall 3s linear forwards;
-}
-@keyframes fall{
-  to{transform:translateY(100vh) rotate(360deg);opacity:0}
 }
 </style>
 </head>
@@ -159,92 +121,119 @@ button{
   <input id="username" placeholder="Username">
   <input id="password" type="password" placeholder="Password">
   <div style="font-size:13px;opacity:.8;">Hint: It’s your nickname 😉</div>
-  <button onclick="checkLogin()">See Your Surprise 💖</button>
-  <div onclick="forgotPassword()" style="font-size:13px;cursor:pointer">
-    Forgot password? 🤔
-  </div>
+  <button onclick="doLogin()">Continue 💖</button>
   <div id="error"></div>
 </div>
 
-<!-- FIRST PAGE -->
-<div class="first center" id="first">
-  <h1>🎉 Happy Birthday <br> Midhuuuu 💕</h1>
-  <button onclick="goSecond()">With Love 💖 Ashoooo 🫶🏻</button>
+<!-- CANDLE PAGE -->
+<div id="candlePage" class="center">
+  <div id="candles">🕯️🕯️🕯️</div>
+  <button onclick="startMic()">Blow the candles 🎤</button>
+  <div id="micStatus">Tap and blow gently 💨</div>
 </div>
 
-<!-- SECOND PAGE -->
-<div id="second" class="center">
+<!-- DARK SCREEN -->
+<div id="darkScreen" class="center">
+  Make a wish… ✨
+</div>
+
+<!-- BIRTHDAY PAGE -->
+<div id="birthday" class="center">
   <div class="card">
-
+    <h2>🎉 Happy Birthday Midhuuuu 💕</h2>
     <img id="slide" src="img1.jpg">
-
-    <p id="typedText"></p>
-
-    <div id="cake" onclick="cutCake()">🎂</div>
-    <div id="cakeMsg">Cake Cut! 🎉💖</div>
-
-    <div id="candles">🕯️🕯️🕯️</div>
-    <button onclick="blowCandles()">Blow Candles 🎤</button>
-    <div id="blowMsg">Candles blown! ✨</div>
-
-    <div class="timeline">
-      💫 When we met <br>
-      😂 All the laughs <br>
-      💖 Forever bond
-    </div>
-
-    <div id="giftBox" onclick="openGift()">🎁
-      <div style="font-size:14px">Tap to open your gift 💝</div>
-    </div>
-
-    <div id="giftMessage">
-      💍 I promise to stand by you, <br>
-      protect your smile, <br>
-      and be there for you always 💖 <br><br>
-      No matter what happens, <br>
-      you are never alone 🤍
-    </div>
-
+    <p id="text"></p>
   </div>
 </div>
 
 <script>
 /* LOGIN */
-const USERNAME="midhuuuu", PASSWORD="forever";
-function checkLogin(){
+const USERNAME="midhuuuu";
+const PASSWORD="forever";
+
+function doLogin(){
   if(username.value===USERNAME && password.value===PASSWORD){
     login.style.display="none";
-    first.style.display="flex";
-  } else error.innerText="Think again 😉";
+    candlePage.style.display="flex";
+  } else error.innerText="Try again 😉";
 }
-function forgotPassword(){
-  error.innerText="Think what Ashoooo calls you 🫶🏻";
+
+/* MIC + CANDLE LOGIC */
+let audioContext, analyser, mic;
+let candleBlown = false; // 🔒 LOCK FLAG
+
+function startMic(){
+  navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
+    audioContext = new AudioContext();
+    analyser = audioContext.createAnalyser();
+    mic = audioContext.createMediaStreamSource(stream);
+    mic.connect(analyser);
+    analyser.fftSize = 256;
+    micStatus.innerText = "Blow now 💨";
+    detectBlow();
+  }).catch(()=>{
+    micStatus.innerText = "Please allow microphone 🎤";
+  });
+}
+
+function detectBlow(){
+  const data = new Uint8Array(analyser.frequencyBinCount);
+
+  function check(){
+    if(candleBlown) return; // 🚫 stop once blown
+
+    analyser.getByteFrequencyData(data);
+    let volume = data.reduce((a,b)=>a+b)/data.length;
+
+    if(volume > 60){
+      candleBlown = true;        // 🔓 UNLOCK
+      candles.innerText = "💨";
+      micStatus.innerText = "Candles blown ✨";
+      setTimeout(showDarkScreen, 800);
+      return;
+    }
+    requestAnimationFrame(check);
+  }
+  check();
+}
+
+/* DARK → BIRTHDAY */
+function showDarkScreen(){
+  candlePage.style.display="none";
+  darkScreen.style.display="flex";
+
+  setTimeout(()=>{
+    darkScreen.style.display="none";
+    showBirthday();
+  },3000);
+}
+
+/* BIRTHDAY (SLIDESHOW STARTS ONLY HERE) */
+function showBirthday(){
+  birthday.style.display="flex";
+  music.play();            // 🔓 music unlocked
+  startSlideshow();        // 🔓 slideshow unlocked
+  startTyping();
+  startEmojiRain();
 }
 
 /* SLIDESHOW */
-const images=["img1.jpg","img2.jpg","img3.jpg"];
-let i=0, beat=false;
-const slide=document.getElementById("slide");
-
+const imgs=["img1.jpg","img2.jpg","img3.jpg"];
+let i=0;
 function startSlideshow(){
   setInterval(()=>{
     slide.style.opacity=0;
     setTimeout(()=>{
-      i=(i+1)%images.length;
-      slide.src=images[i];
+      i=(i+1)%imgs.length;
+      slide.src=imgs[i];
       slide.style.opacity=1;
     },800);
   },4000);
 }
 
-/* IMAGE GLOW SYNC */
-setInterval(()=>{
-  beat=!beat;
-  slide.style.boxShadow=beat?"0 0 25px #ff4b5c":"none";
-},600);
-
 /* TYPING */
-const msg=`Thanks for coming into my life as one of the biggest supporter 💕
+const msg=`Thanks for coming into my life .
+ni enaku one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻
 Thanks for being with me❣️
 
@@ -258,58 +247,35 @@ intha careless boy cares you lot and loves you lotttt 💞💝
 Love you midhuuuu ❤️🫂`;
 let c=0;
 function startTyping(){
-  typedText.innerHTML="";
+  text.innerHTML="";
   c=0;
   const t=setInterval(()=>{
-    typedText.innerHTML+=msg.charAt(c++);
+    text.innerHTML+=msg.charAt(c++);
     if(c>=msg.length)clearInterval(t);
   },40);
 }
 
 /* EMOJI RAIN */
-const emojis=["❤️","💕","💖","🍫","💄"];
+const emojis=["🖤","💙","💖","🍫"];
 function startEmojiRain(){
   setInterval(()=>{
     const e=document.createElement("div");
     e.className="emoji";
     e.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
     e.style.left=Math.random()*100+"vw";
-    e.style.fontSize=(18+Math.random()*18)+"px";
-    e.style.color=beat?"#ff4b5c":"#ff9a9e";
+    e.style.fontSize=(20+Math.random()*20)+"px";
     e.style.animationDuration=(4+Math.random()*4)+"s";
     document.body.appendChild(e);
     setTimeout(()=>e.remove(),8000);
   },300);
 }
-
-/* CONFETTI */
-function confettiOnce(){
-  for(let i=0;i<120;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.top="-10px";
-    c.style.background=["#ff4b5c","#ffd1dc","#fff"][Math.floor(Math.random()*3)];
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
-  }
-}
-
-/* INTERACTIONS */
-function cutCake(){ cakeMsg.style.display="block"; confettiOnce(); }
-function blowCandles(){ candles.innerText="💨"; blowMsg.style.display="block"; }
-function openGift(){ giftBox.style.display="none"; giftMessage.style.display="block"; confettiOnce(); }
-
-/* BUTTON */
-function goSecond(){
-  first.style.display="none";
-  second.style.display="flex";
-  music.play();
-  confettiOnce();
-  startSlideshow();
-  startTyping();
-  startEmojiRain();
-}
+   <div id="promise">
+      💍 I promise to stand by you always, <br>
+      protect your smile, <br>
+      and never leave your side 💖 <br><br>
+      No matter what life brings, <br>
+      you are never alone 🤍
+    </div>
 </script>
 
 </body>

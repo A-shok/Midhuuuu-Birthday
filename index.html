@@ -72,7 +72,7 @@ body{
   max-width:420px;
   padding:20px;
   border-radius:20px;
-  transform:translateZ(0); /* GPU hint */
+  transform:translateZ(0);
 }
 .card img{
   width:100%;
@@ -83,9 +83,7 @@ body{
   transition:opacity 1.2s ease-in-out;
   will-change:opacity;
 }
-.fade-out{
-  opacity:0;
-}
+.fade-out{opacity:0}
 
 .heart{
   font-size:26px;
@@ -106,13 +104,41 @@ body{
   to{transform:translateY(-110vh);opacity:0}
 }
 
-/* SECRET */
+/* SECRET PAGE (PROMISE HANDS + GLOW) */
 #secretPage{
+  position:relative;
   background:
     linear-gradient(rgba(0,0,0,.75),rgba(0,0,0,.75)),
-    url("bg.jpg") center/cover no-repeat;
+    url("promise.jpg") center/cover no-repeat;
   color:white;
   padding:30px;
+  overflow:hidden;
+}
+#secretPage::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(
+    circle at center,
+    rgba(255,105,180,0.25),
+    rgba(0,0,0,0.85) 70%
+  );
+  animation:glowPulse 4s ease-in-out infinite;
+  z-index:0;
+}
+#secretPage *{
+  position:relative;
+  z-index:1;
+}
+@keyframes glowPulse{
+  0%{opacity:0.6}
+  50%{opacity:0.9}
+  100%{opacity:0.6}
+}
+#secretText{
+  font-size:16px;
+  line-height:1.8;
+  text-shadow:0 0 10px rgba(255,182,193,0.6);
 }
 
 /* INPUTS */
@@ -229,15 +255,9 @@ document.addEventListener("DOMContentLoaded",()=>{
     },200);
   }
 
-  /* SMOOTH SLIDESHOW */
   const imgs=["img1.jpg","img2.jpg","img3.jpg"];
   let i=0;
-
-  /* preload images */
-  imgs.forEach(src=>{
-    const im=new Image();
-    im.src=src;
-  });
+  imgs.forEach(s=>{const im=new Image(); im.src=s;});
 
   function startSlideshow(){
     setInterval(()=>{
@@ -278,17 +298,20 @@ Love you midhuuuu ❤️🫂`;
     hide(birthday); show(secret);
     secretText.innerText=`Midhuuuuu,
 
-I promise you now.
-Don't worry about everything.
-I am always there for you.
+I promise you this from my heart —
+No matter how hard the days get,
+you will never face anything alone.
 
-You are never alone.
+I promise to stand beside you,
+to protect your smile,
+and to stay — always.
 
-Ashooo iruken, irupen epovum 💖`;
+Ashooo iruken,
+irupen epovum 🤍`;
   };
 
   function startHearts(){
-    const hearts=["❤️","💕","💖","💓"];
+    const hearts=["💙","💕","❣️","🍫"];
     setInterval(()=>{
       const h=document.createElement("div");
       h.className="float";

@@ -63,7 +63,7 @@ button {
   text-align: center;
 }
 
-/* Slideshow with fade */
+/* Slideshow */
 .card img {
   width: 100%;
   height: 240px;
@@ -82,18 +82,23 @@ button {
   min-height: 180px;
 }
 
-/* Floating hearts */
-.heart {
+/* Floating emojis */
+.emoji {
   position: fixed;
-  bottom: -10px;
-  font-size: 20px;
-  animation: floatUp 6s linear infinite;
+  bottom: -20px;
+  animation: floatUp linear infinite;
   pointer-events: none;
 }
 
 @keyframes floatUp {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-100vh); opacity: 0; }
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
 }
 </style>
 </head>
@@ -123,11 +128,10 @@ button {
 /* ---------- SLIDESHOW ---------- */
 const images = ["img1.jpg", "img2.jpg", "img3.jpg"];
 let index = 0;
-let slideshowInterval;
 const slide = document.getElementById("slide");
 
 function startSlideshow() {
-  slideshowInterval = setInterval(() => {
+  setInterval(() => {
     slide.style.opacity = 0;
     setTimeout(() => {
       index = (index + 1) % images.length;
@@ -139,14 +143,16 @@ function startSlideshow() {
 
 /* ---------- TYPING EFFECT ---------- */
 const message = `
-Thanks for coming into my life as one of the biggest supporters and best,
-sweet and cute friend forever 💕
+Thanks for coming into my life as one of the biggest supporter 💕
+best, sweet and cute friend forever 🫶🏻
+Thanks for being with me❣️
 
-Midhuuuu you are my safe place, my comfort zone lusu 🫶🏻
-and my forever person 💖 eppovum ena vitu poidatha pleasee 🥺🥺
+Midhuuuu you are my safe place and my comfort zone lusu 💖
+and my forever person ❤️ 
+eppovum ena vitu poidatha pleasee 🥺🥺
 
 I’m so grateful for you.
-Hey my sugar plum ❤️
+Hey my sugar plum 🥰❤️
 intha careless boy cares you lot and loves you lotttt 💞💝
 Love you midhuuuu ❤️🫂
 `;
@@ -159,33 +165,4 @@ function startTyping() {
   const typing = setInterval(() => {
     el.innerHTML += message.charAt(charIndex);
     charIndex++;
-    if (charIndex >= message.length) clearInterval(typing);
-  }, 35);
-}
-
-/* ---------- FLOATING HEARTS ---------- */
-function startHearts() {
-  setInterval(() => {
-    const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerHTML = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
-    document.body.appendChild(heart);
-    setTimeout(() => heart.remove(), 6000);
-  }, 300);
-}
-
-/* ---------- BUTTON CLICK ---------- */
-function goSecond() {
-  document.getElementById("first").style.display = "none";
-  document.getElementById("second").style.display = "block";
-  document.getElementById("music").play();
-
-  startSlideshow();
-  startTyping();
-  startHearts();
-}
-</script>
-
-</body>
-</html>
+    if (charIndex >= message.length) clearInterval(typin

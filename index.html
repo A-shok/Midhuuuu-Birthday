@@ -13,7 +13,7 @@ body{
   overflow:hidden;
 }
 
-/* COMMON CENTER */
+/* COMMON */
 .center{
   min-height:100vh;
   display:flex;
@@ -23,13 +23,13 @@ body{
   text-align:center;
 }
 
-/* ---------- LOGIN (NO BG IMAGE) ---------- */
+/* LOGIN – NO BG IMAGE */
 #login{
-  background:#000;     /* 🔥 NO IMAGE */
+  background:#000;
   color:white;
 }
 
-/* ---------- CANDLE PAGE ---------- */
+/* CANDLE PAGE */
 #candlePage{
   display:none;
   background:
@@ -38,7 +38,7 @@ body{
   color:#ffd1dc;
 }
 
-/* ---------- DARK SCREEN ---------- */
+/* DARK SCREEN */
 #darkScreen{
   display:none;
   background:#000;
@@ -46,7 +46,7 @@ body{
   font-size:24px;
 }
 
-/* ---------- BIRTHDAY PAGE ---------- */
+/* BIRTHDAY PAGE */
 #birthday{
   display:none;
   background:
@@ -95,12 +95,21 @@ button{
   border-radius:20px;
   color:#333;
 }
+
 .card img{
   width:100%;
   height:220px;
   object-fit:cover;
   border-radius:15px;
   transition:opacity 1s;
+}
+
+/* SIGNATURE */
+.signature{
+  margin-top:15px;
+  font-size:15px;
+  color:#d81b60;
+  font-weight:600;
 }
 
 /* EMOJIS */
@@ -149,13 +158,14 @@ button{
     <h2>🎉 Happy Birthday Midhuuuu 💕</h2>
     <img id="slide" src="img1.jpg">
     <p id="text"></p>
+    <div class="signature">— With love, Ashoooo 🫶🏻</div>
   </div>
 </div>
 
 <script>
 "use strict";
 
-/* ELEMENT REFERENCES */
+/* ELEMENTS */
 const loginDiv = document.getElementById("login");
 const candleDiv = document.getElementById("candlePage");
 const darkDiv = document.getElementById("darkScreen");
@@ -172,20 +182,16 @@ const USERNAME="midhuuuu";
 const PASSWORD="forever";
 
 function doLogin(){
-  const u = document.getElementById("username").value.trim();
-  const p = document.getElementById("password").value.trim();
-
-  if(u === USERNAME && p === PASSWORD){
+  const u=document.getElementById("username").value.trim();
+  const p=document.getElementById("password").value.trim();
+  if(u===USERNAME && p===PASSWORD){
     loginDiv.style.display="none";
     candleDiv.style.display="flex";
-  } else {
-    errorDiv.innerText="Try again 😉";
-  }
+  } else errorDiv.innerText="Try again 😉";
 }
 
 /* MIC + CANDLE */
-let audioContext, analyser, mic;
-let candleBlown=false;
+let audioContext, analyser, mic, candleBlown=false;
 
 function startMic(){
   navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
@@ -196,8 +202,6 @@ function startMic(){
     analyser.fftSize=256;
     micStatusEl.innerText="Blow now 💨";
     detectBlow();
-  }).catch(()=>{
-    micStatusEl.innerText="Please allow microphone 🎤";
   });
 }
 
@@ -207,7 +211,7 @@ function detectBlow(){
     if(candleBlown) return;
     analyser.getByteFrequencyData(data);
     let volume=data.reduce((a,b)=>a+b)/data.length;
-    if(volume > 35){
+    if(volume>35){
       candleBlown=true;
       candlesEl.innerText="💨";
       setTimeout(showDark,800);
@@ -231,6 +235,7 @@ function showDark(){
 /* BIRTHDAY */
 const imgs=["img1.jpg","img2.jpg","img3.jpg"];
 let i=0;
+
 function showBirthday(){
   birthdayDiv.style.display="flex";
   music.play();
@@ -250,14 +255,13 @@ function startSlideshow(){
   },4000);
 }
 
-/* TYPING */
-const msg=`Thanks for coming into my life .
+/* TYPING – YOUR CONTENT */
+const msg=`Thanks for coming into my life.
 ni enaku one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻
-Thanks for being with me❣️
 
 Midhuuuu you are my safe place and my comfort zone lusu 💖
-and my forever person ❤️ 
+and my forever person ❤️
 eppovum ena vitu poidatha pleasee 🥺🥺
 
 I’m so grateful for you.
@@ -275,7 +279,7 @@ function startTyping(){
   },40);
 }
 
-/* EMOJI RAIN */
+/* EMOJIS */
 const emojis=["🖤","💙","💖","🍫"];
 function startEmojiRain(){
   setInterval(()=>{

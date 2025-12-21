@@ -23,13 +23,10 @@ body{
   text-align:center;
 }
 
-/* LOGIN – NO BG */
-#login{
-  background:#000;
-  color:white;
-}
+/* LOGIN */
+#login{background:#000;color:white}
 
-/* CANDLE PAGE – NO BG */
+/* CANDLE PAGE */
 #candlePage{
   display:none;
   background:#000;
@@ -37,20 +34,25 @@ body{
 }
 #candles{
   font-size:70px;
-  margin-bottom:20px;
+  margin-bottom:10px;
+  animation:flicker .25s infinite alternate;
 }
-#micStatus{
-  font-size:14px;
+@keyframes flicker{
+  from{transform:rotate(-1deg);text-shadow:0 0 8px orange}
+  to{transform:rotate(1deg);text-shadow:0 0 15px gold}
+}
+
+/* COUNTDOWN */
+#countdown{
+  font-size:32px;
   margin-top:10px;
+  letter-spacing:6px;
 }
 
-/* DARK SCREEN – EMPTY */
-#darkScreen{
-  display:none;
-  background:#000;
-}
+/* DARK SCREEN */
+#darkScreen{display:none;background:#000}
 
-/* WISH PAGE – BG IMAGE */
+/* WISH PAGE */
 #wishPage{
   display:none;
   background:
@@ -58,9 +60,7 @@ body{
     url("bg.jpg") center/cover no-repeat;
   color:white;
 }
-#wishPage h1{
-  font-size:36px;
-}
+#wishPage h1{font-size:36px}
 
 .glow-btn{
   margin-top:25px;
@@ -78,7 +78,7 @@ body{
   to{box-shadow:0 0 30px #ff9a9e}
 }
 
-/* SLIDESHOW PAGE */
+/* SLIDESHOW */
 #birthday{
   display:none;
   background:
@@ -87,7 +87,6 @@ body{
   color:white;
   overflow-y:auto;
 }
-
 .card{
   background:rgba(255,255,255,.97);
   max-width:420px;
@@ -122,7 +121,7 @@ button{
   margin-top:12px;
 }
 
-/* EMOJIS */
+/* EMOJI RAIN */
 .emoji{
   position:fixed;
   bottom:-20px;
@@ -153,8 +152,8 @@ button{
 <!-- CANDLE PAGE -->
 <div id="candlePage" class="center">
   <div id="candles">🕯️🕯️🕯️</div>
-  <button onclick="startMic()">Blow the candles 🎤</button>
-  <div id="micStatus">Tap and blow gently 💨</div>
+  <div id="countdown"></div>
+  <button onclick="blowCandles()">Blow the candles 🎤</button>
 </div>
 
 <!-- DARK SCREEN -->
@@ -178,16 +177,15 @@ button{
 "use strict";
 
 /* ELEMENTS */
-const loginDiv = document.getElementById("login");
-const candleDiv = document.getElementById("candlePage");
-const darkDiv = document.getElementById("darkScreen");
-const wishDiv = document.getElementById("wishPage");
-const birthdayDiv = document.getElementById("birthday");
-const errorDiv = document.getElementById("error");
-const candlesEl = document.getElementById("candles");
-const micStatusEl = document.getElementById("micStatus");
-const slide = document.getElementById("slide");
-const textEl = document.getElementById("text");
+const loginDiv = login;
+const candleDiv = candlePage;
+const darkDiv = darkScreen;
+const wishDiv = wishPage;
+const birthdayDiv = birthday;
+const candlesEl = candles;
+const countdownEl = countdown;
+const slide = slide;
+const textEl = text;
 const music = document.getElementById("music");
 
 /* LOGIN */
@@ -198,53 +196,26 @@ function doLogin(){
   if(username.value.trim()===USERNAME && password.value.trim()===PASSWORD){
     loginDiv.style.display="none";
     candleDiv.style.display="flex";
-  } else errorDiv.innerText="Try again 😉";
+  } else error.innerText="Try again 😉";
 }
 
-/* MOBILE-SAFE MIC BLOW */
-let audioContext, analyser, mic, blown=false;
+/* CANDLE + COUNTDOWN */
+function blowCandles(){
+  let count = 3;
+  countdownEl.innerText = count;
 
-function startMic(){
-  navigator.mediaDevices.getUserMedia({ audio:true }).then(stream=>{
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    audioContext.resume();
-
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-
-    mic = audioContext.createMediaStreamSource(stream);
-    mic.connect(analyser);
-
-    micStatusEl.innerText="Blow now 💨";
-    detectBlow(stream);
-  }).catch(()=>{
-    micStatusEl.innerText="Allow microphone 🎤";
-  });
-}
-
-function detectBlow(stream){
-  const buffer = new Uint8Array(analyser.fftSize);
-
-  function check(){
-    if(blown) return;
-
-    analyser.getByteTimeDomainData(buffer);
-    let sum = 0;
-    for(let i=0;i<buffer.length;i++){
-      sum += Math.abs(buffer[i] - 128);
-    }
-    let volume = sum / buffer.length;
-
-    if(volume > 8){   // 📱 Phone-friendly
-      blown = true;
+  const timer = setInterval(()=>{
+    count--;
+    if(count>0){
+      countdownEl.innerText = count;
+    } else {
+      clearInterval(timer);
+      candlesEl.style.animation="none";
       candlesEl.innerText="💨";
-      stream.getTracks().forEach(t=>t.stop()); // MIC OFF
+      countdownEl.innerText="";
       setTimeout(showDark,800);
-      return;
     }
-    requestAnimationFrame(check);
-  }
-  check();
+  },1000);
 }
 
 /* DARK → WISH */
@@ -281,7 +252,7 @@ function startSlideshow(){
   },4000);
 }
 
-/* TYPING – YOUR CONTENT */
+/* TYPING */
 const msg=`Thanks for coming into my life .
 ni enaku one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻

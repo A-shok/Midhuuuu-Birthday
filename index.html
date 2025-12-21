@@ -23,61 +23,18 @@ body{
   text-align:center;
 }
 
-/* LOGIN – NO BG IMAGE */
+/* LOGIN – NO BG */
 #login{
   background:#000;
   color:white;
 }
 
-/* CANDLE PAGE */
+/* CANDLE PAGE – NO BG */
 #candlePage{
   display:none;
-  background:
-    linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
-    url("bg.jpg") center/cover no-repeat;
+  background:#000;
   color:#ffd1dc;
 }
-
-/* DARK SCREEN */
-#darkScreen{
-  display:none;
-  background:#000;
-  color:white;
-  font-size:24px;
-}
-
-/* BIRTHDAY PAGE */
-#birthday{
-  display:none;
-  background:
-    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
-    url("bg.jpg") center/cover no-repeat;
-  color:white;
-  overflow-y:auto;
-}
-
-/* INPUTS */
-input{
-  width:220px;
-  padding:12px;
-  margin:6px;
-  border-radius:25px;
-  border:none;
-  text-align:center;
-}
-
-/* BUTTON */
-button{
-  padding:12px 30px;
-  border:none;
-  border-radius:30px;
-  background:#ff4b5c;
-  color:white;
-  cursor:pointer;
-  margin-top:12px;
-}
-
-/* CANDLES */
 #candles{
   font-size:70px;
   margin-bottom:20px;
@@ -87,7 +44,51 @@ button{
   margin-top:10px;
 }
 
-/* CARD */
+/* DARK SCREEN – EMPTY */
+#darkScreen{
+  display:none;
+  background:#000;
+}
+
+/* WISH PAGE – BG IMAGE */
+#wishPage{
+  display:none;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+}
+
+#wishPage h1{
+  font-size:36px;
+}
+
+.glow-btn{
+  margin-top:25px;
+  padding:14px 36px;
+  border:none;
+  border-radius:30px;
+  font-size:16px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+  animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{box-shadow:0 0 10px #ff4b5c}
+  to{box-shadow:0 0 30px #ff9a9e}
+}
+
+/* SLIDESHOW PAGE */
+#birthday{
+  display:none;
+  background:
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
+    url("bg.jpg") center/cover no-repeat;
+  color:white;
+  overflow-y:auto;
+}
+
 .card{
   background:rgba(255,255,255,.97);
   max-width:420px;
@@ -104,12 +105,23 @@ button{
   transition:opacity 1s;
 }
 
-/* SIGNATURE */
-.signature{
-  margin-top:15px;
-  font-size:15px;
-  color:#d81b60;
-  font-weight:600;
+/* INPUT + BUTTON */
+input{
+  width:220px;
+  padding:12px;
+  margin:6px;
+  border-radius:25px;
+  border:none;
+  text-align:center;
+}
+button{
+  padding:12px 30px;
+  border:none;
+  border-radius:30px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+  margin-top:12px;
 }
 
 /* EMOJIS */
@@ -147,18 +159,20 @@ button{
   <div id="micStatus">Tap and blow gently 💨</div>
 </div>
 
-<!-- DARK SCREEN -->
-<div id="darkScreen" class="center">
-  Make a wish… ✨
+<!-- DARK SCREEN (EMPTY) -->
+<div id="darkScreen" class="center"></div>
+
+<!-- WISH PAGE -->
+<div id="wishPage" class="center">
+  <h1>🎉 Happy Birthday <br> Midhuuuu 🫶🏻❤️</h1>
+  <button class="glow-btn" onclick="openSurprise()">With love Ashoooo 🫶🏻</button>
 </div>
 
-<!-- BIRTHDAY PAGE -->
+<!-- SLIDESHOW PAGE -->
 <div id="birthday" class="center">
   <div class="card">
-    <h2>🎉 Happy Birthday Midhuuuu 💕</h2>
     <img id="slide" src="img1.jpg">
     <p id="text"></p>
-    <div class="signature">— With love, Ashoooo 🫶🏻</div>
   </div>
 </div>
 
@@ -166,32 +180,31 @@ button{
 "use strict";
 
 /* ELEMENTS */
-const loginDiv = document.getElementById("login");
-const candleDiv = document.getElementById("candlePage");
-const darkDiv = document.getElementById("darkScreen");
-const birthdayDiv = document.getElementById("birthday");
-const errorDiv = document.getElementById("error");
-const candlesEl = document.getElementById("candles");
-const micStatusEl = document.getElementById("micStatus");
-const slide = document.getElementById("slide");
-const textEl = document.getElementById("text");
-const music = document.getElementById("music");
+const loginDiv=document.getElementById("login");
+const candleDiv=document.getElementById("candlePage");
+const darkDiv=document.getElementById("darkScreen");
+const wishDiv=document.getElementById("wishPage");
+const birthdayDiv=document.getElementById("birthday");
+const errorDiv=document.getElementById("error");
+const candlesEl=document.getElementById("candles");
+const micStatusEl=document.getElementById("micStatus");
+const slide=document.getElementById("slide");
+const textEl=document.getElementById("text");
+const music=document.getElementById("music");
 
 /* LOGIN */
 const USERNAME="midhuuuu";
 const PASSWORD="forever";
 
 function doLogin(){
-  const u=document.getElementById("username").value.trim();
-  const p=document.getElementById("password").value.trim();
-  if(u===USERNAME && p===PASSWORD){
+  if(username.value.trim()===USERNAME && password.value.trim()===PASSWORD){
     loginDiv.style.display="none";
     candleDiv.style.display="flex";
   } else errorDiv.innerText="Try again 😉";
 }
 
-/* MIC + CANDLE */
-let audioContext, analyser, mic, candleBlown=false;
+/* MIC */
+let audioContext, analyser, mic, blown=false;
 
 function startMic(){
   navigator.mediaDevices.getUserMedia({audio:true}).then(stream=>{
@@ -201,19 +214,20 @@ function startMic(){
     mic.connect(analyser);
     analyser.fftSize=256;
     micStatusEl.innerText="Blow now 💨";
-    detectBlow();
+    detectBlow(stream);
   });
 }
 
-function detectBlow(){
+function detectBlow(stream){
   const data=new Uint8Array(analyser.frequencyBinCount);
   function check(){
-    if(candleBlown) return;
+    if(blown) return;
     analyser.getByteFrequencyData(data);
     let volume=data.reduce((a,b)=>a+b)/data.length;
     if(volume>35){
-      candleBlown=true;
+      blown=true;
       candlesEl.innerText="💨";
+      stream.getTracks().forEach(t=>t.stop());
       setTimeout(showDark,800);
       return;
     }
@@ -222,21 +236,19 @@ function detectBlow(){
   check();
 }
 
-/* DARK → BIRTHDAY */
+/* DARK → WISH */
 function showDark(){
   candleDiv.style.display="none";
   darkDiv.style.display="flex";
   setTimeout(()=>{
     darkDiv.style.display="none";
-    showBirthday();
+    wishDiv.style.display="flex";
   },3000);
 }
 
-/* BIRTHDAY */
-const imgs=["img1.jpg","img2.jpg","img3.jpg"];
-let i=0;
-
-function showBirthday(){
+/* WISH → SLIDESHOW */
+function openSurprise(){
+  wishDiv.style.display="none";
   birthdayDiv.style.display="flex";
   music.play();
   startSlideshow();
@@ -244,6 +256,9 @@ function showBirthday(){
   startEmojiRain();
 }
 
+/* SLIDESHOW */
+const imgs=["img1.jpg","img2.jpg","img3.jpg"];
+let i=0;
 function startSlideshow(){
   setInterval(()=>{
     slide.style.opacity=0;
@@ -256,12 +271,13 @@ function startSlideshow(){
 }
 
 /* TYPING – YOUR CONTENT */
-const msg=`Thanks for coming into my life.
+const msg=`Thanks for coming into my life .
 ni enaku one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻
+Thanks for being with me❣️
 
 Midhuuuu you are my safe place and my comfort zone lusu 💖
-and my forever person ❤️
+and my forever person ❤️ 
 eppovum ena vitu poidatha pleasee 🥺🥺
 
 I’m so grateful for you.
@@ -279,7 +295,7 @@ function startTyping(){
   },40);
 }
 
-/* EMOJIS */
+/* EMOJI RAIN */
 const emojis=["🖤","💙","💖","🍫"];
 function startEmojiRain(){
   setInterval(()=>{

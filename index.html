@@ -6,128 +6,143 @@
 <title>Happy Birthday Midhuuuu 💕</title>
 
 <style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  min-height: 100vh;
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  min-height:100vh;
   background:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.65)),
     url("bg.jpg") center/cover no-repeat;
-  overflow-x: hidden;
-  transition: filter 1.5s ease;
+  overflow-x:hidden;
 }
 
-/* Blur background after click */
-body.blur {
-  filter: blur(4px);
+/* COMMON */
+.center{text-align:center;color:white}
+
+/* LOGIN / FIRST / SECOND */
+#login,.first,#second{
+  min-height:100vh;
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+#login{display:flex}
+
+input{
+  width:220px;
+  padding:12px;
+  margin:6px 0;
+  border-radius:25px;
+  border:none;
+  text-align:center;
+}
+button{
+  padding:12px 30px;
+  border:none;
+  border-radius:30px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+  margin-top:12px;
 }
 
 /* FIRST PAGE */
-.first {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  text-align: center;
+.first h1{
+  font-size:38px;
+  animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{ text-shadow:0 0 10px #fff;}
+  to{ text-shadow:0 0 30px #ff4b5c;}
 }
 
-.first h1 {
-  font-size: 38px;
-  animation: glowText 2s infinite alternate;
+/* CARD */
+.card{
+  background:rgba(255,255,255,.97);
+  max-width:420px;
+  padding:20px;
+  border-radius:20px;
+  color:#333;
+  text-align:center;
 }
 
-@keyframes glowText {
-  from { text-shadow: 0 0 10px #fff; }
-  to { text-shadow: 0 0 30px #ff4b5c; }
+/* SLIDESHOW */
+.card img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:15px;
+  transition:opacity 1s, box-shadow .3s;
 }
 
-button {
-  margin-top: 25px;
-  padding: 14px 34px;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  background: #ff4b5c;
-  color: white;
-  cursor: pointer;
+/* TEXT */
+.card p{
+  font-size:15px;
+  line-height:1.6;
+  min-height:170px;
 }
 
-/* SECOND PAGE */
-#second {
-  display: none;
-  padding: 30px 0;
-  position: relative;
-  z-index: 10;
+/* CAKE */
+#cake{
+  font-size:80px;
+  cursor:pointer;
+}
+#cakeMsg{display:none;color:#d81b60}
+
+/* CANDLES */
+#candles{font-size:50px}
+#blowMsg{display:none;color:#ff4b5c}
+
+/* TIMELINE */
+.timeline{
+  text-align:left;
+  font-size:14px;
+  margin-top:10px;
 }
 
-.card {
-  background: rgba(255,255,255,0.97);
-  max-width: 420px;
-  margin: auto;
-  padding: 20px;
-  border-radius: 20px;
-  text-align: center;
+/* GIFT */
+#giftBox{
+  font-size:70px;
+  cursor:pointer;
+  animation:shake 2s infinite;
+}
+@keyframes shake{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(-5deg)}
+  75%{transform:rotate(5deg)}
+}
+#giftMessage{
+  display:none;
+  font-size:16px;
+  color:#d81b60;
+  margin-top:15px;
+  animation:fadeIn 2s forwards;
+}
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(.8)}
+  to{opacity:1;transform:scale(1)}
 }
 
-/* Image with glow sync */
-.card img {
-  width: 100%;
-  height: 240px;
-  object-fit: cover;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  opacity: 1;
-  transition: opacity 1s ease-in-out, box-shadow 0.3s ease;
+/* EMOJI RAIN */
+.emoji{
+  position:fixed;
+  bottom:-20px;
+  animation:floatUp linear infinite;
+}
+@keyframes floatUp{
+  to{transform:translateY(-110vh);opacity:0}
 }
 
-/* Text */
-.card p {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #333;
-  min-height: 180px;
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  animation:fall 3s linear forwards;
 }
-
-/* End message */
-#endMessage {
-  margin-top: 15px;
-  font-size: 18px;
-  color: #ff4b5c;
-  opacity: 0;
-  transition: opacity 2s ease;
-}
-
-}
-
-@keyframes fadeIn {
-  to { opacity: 1; }
-}
-
-/* Floating emojis */
-.emoji {
-  position: fixed;
-  bottom: -20px;
-  animation: floatUp linear infinite;
-  pointer-events: none;
-}
-
-@keyframes floatUp {
-  from { transform: translateY(0); opacity: 1; }
-  to { transform: translateY(-110vh); opacity: 0; }
-}
-
-/* Confetti */
-.confetti {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  animation: fall 3s linear forwards;
-}
-
-@keyframes fall {
-  to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);opacity:0}
 }
 </style>
 </head>
@@ -135,116 +150,161 @@ button {
 <body>
 
 <audio id="music" loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="music.mp3">
 </audio>
 
+<!-- LOGIN -->
+<div id="login" class="center">
+  <h2>🔐 Enter to see your surprise 💝</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <div style="font-size:13px;opacity:.8;">Hint: It’s your nickname 😉</div>
+  <button onclick="checkLogin()">See Your Surprise 💖</button>
+  <div onclick="forgotPassword()" style="font-size:13px;cursor:pointer">
+    Forgot password? 🤔
+  </div>
+  <div id="error"></div>
+</div>
+
 <!-- FIRST PAGE -->
-<div class="first" id="first">
+<div class="first center" id="first">
   <h1>🎉 Happy Birthday <br> Midhuuuu 💕</h1>
   <button onclick="goSecond()">With Love 💖 Ashoooo 🫶🏻</button>
 </div>
 
 <!-- SECOND PAGE -->
-<div id="second">
+<div id="second" class="center">
   <div class="card">
+
     <img id="slide" src="img1.jpg">
+
     <p id="typedText"></p>
-    <div id="endMessage">Forever Yours 💖</div>
+
+    <div id="cake" onclick="cutCake()">🎂</div>
+    <div id="cakeMsg">Cake Cut! 🎉💖</div>
+
+    <div id="candles">🕯️🕯️🕯️</div>
+    <button onclick="blowCandles()">Blow Candles 🎤</button>
+    <div id="blowMsg">Candles blown! ✨</div>
+
+    <div class="timeline">
+      💫 When we met <br>
+      😂 All the laughs <br>
+      💖 Forever bond
+    </div>
+
+    <div id="giftBox" onclick="openGift()">🎁
+      <div style="font-size:14px">Tap to open your gift 💝</div>
+    </div>
+
+    <div id="giftMessage">
+      💍 I promise to stand by you, <br>
+      protect your smile, <br>
+      and be there for you always 💖 <br><br>
+      No matter what happens, <br>
+      you are never alone 🤍
+    </div>
+
   </div>
 </div>
 
 <script>
-/* SLIDESHOW */
-const images = ["img1.jpg", "img2.jpg", "img3.jpg"];
-let index = 0;
-const slide = document.getElementById("slide");
-
-function startSlideshow() {
-  setInterval(() => {
-    slide.style.opacity = 0;
-    setTimeout(() => {
-      index = (index + 1) % images.length;
-      slide.src = images[index];
-      slide.style.opacity = 1;
-    }, 800);
-  }, 4000);
+/* LOGIN */
+const USERNAME="midhuuuu", PASSWORD="forever";
+function checkLogin(){
+  if(username.value===USERNAME && password.value===PASSWORD){
+    login.style.display="none";
+    first.style.display="flex";
+  } else error.innerText="Think again 😉";
+}
+function forgotPassword(){
+  error.innerText="Think what Ashoooo calls you 🫶🏻";
 }
 
+/* SLIDESHOW */
+const images=["img1.jpg","img2.jpg","img3.jpg"];
+let i=0, beat=false;
+const slide=document.getElementById("slide");
+
+function startSlideshow(){
+  setInterval(()=>{
+    slide.style.opacity=0;
+    setTimeout(()=>{
+      i=(i+1)%images.length;
+      slide.src=images[i];
+      slide.style.opacity=1;
+    },800);
+  },4000);
+}
+
+/* IMAGE GLOW SYNC */
+setInterval(()=>{
+  beat=!beat;
+  slide.style.boxShadow=beat?"0 0 25px #ff4b5c":"none";
+},600);
+
 /* TYPING */
-const message = `
-Thanks for coming into my life as one of the biggest supporter 💕
+const msg=`Thanks for coming into my life as one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻
+Thanks for being with me❣️
 
 Midhuuuu you are my safe place and my comfort zone lusu 💖
-and my forever person ❤️
+and my forever person ❤️ 
 eppovum ena vitu poidatha pleasee 🥺🥺
 
 I’m so grateful for you.
 Hey my sugar plum 🥰❤️
 intha careless boy cares you lot and loves you lotttt 💞💝
-Love you midhuuuu ❤️🫂
-`;
-
-let charIndex = 0;
-function startTyping() {
-  const el = document.getElementById("typedText");
-  el.innerHTML = "";
-  charIndex = 0;
-  const typing = setInterval(() => {
-    el.innerHTML += message.charAt(charIndex);
-    charIndex++;
-    if (charIndex >= message.length) clearInterval(typing);
-  }, 35);
+Love you midhuuuu ❤️🫂`;
+let c=0;
+function startTyping(){
+  typedText.innerHTML="";
+  c=0;
+  const t=setInterval(()=>{
+    typedText.innerHTML+=msg.charAt(c++);
+    if(c>=msg.length)clearInterval(t);
+  },40);
 }
 
-/* EMOJI RAIN + BEAT */
-const emojis = ["❤️","💕","💖","🍫","💄"];
-let beat = false;
-
-setInterval(() => beat = !beat, 600);
-
-function startEmojiRain() {
-  setInterval(() => {
-    const e = document.createElement("div");
-    e.className = "emoji";
-    e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
-    e.style.left = Math.random() * 100 + "vw";
-    e.style.fontSize = (18 + Math.random() * 18) + "px";
-    e.style.animationDuration = (4 + Math.random() * 3) + "s";
-    e.style.color = beat ? "#ff4b5c" : "#ff9a9e";
+/* EMOJI RAIN */
+const emojis=["❤️","💕","💖","🍫","💄"];
+function startEmojiRain(){
+  setInterval(()=>{
+    const e=document.createElement("div");
+    e.className="emoji";
+    e.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+    e.style.left=Math.random()*100+"vw";
+    e.style.fontSize=(18+Math.random()*18)+"px";
+    e.style.color=beat?"#ff4b5c":"#ff9a9e";
+    e.style.animationDuration=(4+Math.random()*4)+"s";
     document.body.appendChild(e);
-    setTimeout(() => e.remove(), 8000);
-  }, 260);
+    setTimeout(()=>e.remove(),8000);
+  },300);
 }
 
-/* Image glow sync */
-setInterval(() => {
-  slide.style.boxShadow = beat
-    ? "0 0 25px rgba(255,75,92,0.9)"
-    : "0 0 0 rgba(0,0,0,0)";
-}, 600);
-
-/* Confetti once */
-function confettiOnce() {
-  for (let i = 0; i < 120; i++) {
-    const c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = Math.random() * 100 + "vw";
-    c.style.top = "-10px";
-    c.style.background =
-      ["#ff4b5c","#ffd1dc","#fff","#ff9a9e"][Math.floor(Math.random()*4)];
+/* CONFETTI */
+function confettiOnce(){
+  for(let i=0;i<120;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.top="-10px";
+    c.style.background=["#ff4b5c","#ffd1dc","#fff"][Math.floor(Math.random()*3)];
     document.body.appendChild(c);
-    setTimeout(() => c.remove(), 3000);
+    setTimeout(()=>c.remove(),3000);
   }
 }
 
-/* BUTTON */
-function goSecond() {
-  document.getElementById("first").style.display = "none";
-  document.getElementById("second").style.display = "block";
-  document.body.classList.add("blur");
-  document.getElementById("music").play();
+/* INTERACTIONS */
+function cutCake(){ cakeMsg.style.display="block"; confettiOnce(); }
+function blowCandles(){ candles.innerText="💨"; blowMsg.style.display="block"; }
+function openGift(){ giftBox.style.display="none"; giftMessage.style.display="block"; confettiOnce(); }
 
+/* BUTTON */
+function goSecond(){
+  first.style.display="none";
+  second.style.display="flex";
+  music.play();
   confettiOnce();
   startSlideshow();
   startTyping();
@@ -254,4 +314,3 @@ function goSecond() {
 
 </body>
 </html>
-

@@ -1,107 +1,106 @@
 <script>
-"use strict";
+document.addEventListener("DOMContentLoaded", function () {
 
-/* GET ELEMENTS (SAFE FOR MOBILE) */
-const loginDiv = document.getElementById("login");
-const candleDiv = document.getElementById("candlePage");
-const darkDiv = document.getElementById("darkScreen");
-const wishDiv = document.getElementById("wishPage");
-const birthdayDiv = document.getElementById("birthday");
-const secretDiv = document.getElementById("secretPage");
+  /* ELEMENTS */
+  const loginDiv = document.getElementById("login");
+  const candleDiv = document.getElementById("candlePage");
+  const darkDiv = document.getElementById("darkScreen");
+  const wishDiv = document.getElementById("wishPage");
+  const birthdayDiv = document.getElementById("birthday");
+  const secretDiv = document.getElementById("secretPage");
 
-const usernameInput = document.getElementById("username");
-const passwordInput = document.getElementById("password");
-const errorDiv = document.getElementById("error");
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const errorDiv = document.getElementById("error");
 
-const candlesEl = document.getElementById("candles");
-const slide = document.getElementById("slide");
-const textEl = document.getElementById("text");
-const secretBtn = document.getElementById("secretBtn");
-const secretText = document.getElementById("secretText");
+  const candlesEl = document.getElementById("candles");
+  const slide = document.getElementById("slide");
+  const textEl = document.getElementById("text");
+  const secretBtn = document.getElementById("secretBtn");
+  const secretText = document.getElementById("secretText");
 
-const music = document.getElementById("music");
+  const loginBtn = document.getElementById("loginBtn");
+  const blowBtn = document.getElementById("blowBtn");
+  const loveBtn = document.getElementById("loveBtn");
+  const music = document.getElementById("music");
 
-const loginBtn = document.getElementById("loginBtn");
-const blowBtn = document.getElementById("blowBtn");
-const loveBtn = document.getElementById("loveBtn");
-
-/* LOGIN CREDENTIALS */
-const USERNAME = "midhuuuu";
-const PASSWORD = "forever";
-
-/* LOGIN ACTION */
-loginBtn.addEventListener("click", () => {
-  if (
-    usernameInput.value.trim() === USERNAME &&
-    passwordInput.value.trim() === PASSWORD
-  ) {
-    loginDiv.style.display = "none";
-    candleDiv.style.display = "flex";
-  } else {
-    errorDiv.innerText = "Try again 😉";
+  /* SAFETY CHECK */
+  if (!loginBtn || !blowBtn || !loveBtn) {
+    alert("HTML IDs missing. Please re-check button IDs.");
+    return;
   }
-});
 
-/* CANDLE EFFECT (NO EMOJI) */
-blowBtn.addEventListener("click", () => {
-  blowBtn.disabled = true;
+  /* LOGIN */
+  const USERNAME = "midhuuuu";
+  const PASSWORD = "forever";
 
-  // white glow phase
-  candleDiv.style.background = "#fff";
-  candlesEl.style.color = "#ff9a00";
+  loginBtn.addEventListener("click", () => {
+    if (
+      usernameInput.value.trim() === USERNAME &&
+      passwordInput.value.trim() === PASSWORD
+    ) {
+      loginDiv.style.display = "none";
+      candleDiv.style.display = "flex";
+    } else {
+      errorDiv.innerText = "Try again 😉";
+    }
+  });
 
-  // keep candle on for 3 sec
-  setTimeout(() => {
-    candleDiv.style.display = "none";
-    darkDiv.style.display = "flex";
+  /* CANDLE */
+  blowBtn.addEventListener("click", () => {
+    blowBtn.disabled = true;
+    candleDiv.style.background = "#fff";
+    candlesEl.style.color = "#ff9a00";
 
-    // dark screen for 3 sec
     setTimeout(() => {
-      darkDiv.style.display = "none";
-      wishDiv.style.display = "flex";
+      candleDiv.style.display = "none";
+      darkDiv.style.display = "flex";
+
+      setTimeout(() => {
+        darkDiv.style.display = "none";
+        wishDiv.style.display = "flex";
+      }, 3000);
+
     }, 3000);
+  });
 
-  }, 3000);
-});
+  /* WISH → SLIDESHOW */
+  loveBtn.addEventListener("click", () => {
+    wishDiv.style.display = "none";
+    birthdayDiv.style.display = "flex";
+    fadeInMusic();
+    startTyping();
+    startSlideshow();
+  });
 
-/* WISH → SLIDESHOW */
-loveBtn.addEventListener("click", () => {
-  wishDiv.style.display = "none";
-  birthdayDiv.style.display = "flex";
-  fadeInMusic();
-  startSlideshow();
-  startTyping();
-});
+  /* MUSIC */
+  function fadeInMusic() {
+    music.volume = 0;
+    music.play();
+    let v = 0;
+    const fade = setInterval(() => {
+      v += 0.05;
+      music.volume = Math.min(v, 1);
+      if (v >= 1) clearInterval(fade);
+    }, 200);
+  }
 
-/* MUSIC FADE IN */
-music.volume = 0;
-function fadeInMusic() {
-  music.play();
-  let v = 0;
-  const fade = setInterval(() => {
-    v += 0.05;
-    music.volume = Math.min(v, 1);
-    if (v >= 1) clearInterval(fade);
-  }, 200);
-}
+  /* SLIDESHOW */
+  const images = ["img1.jpg", "img2.jpg", "img3.jpg"];
+  let index = 0;
+  function startSlideshow() {
+    setInterval(() => {
+      slide.style.opacity = 0;
+      setTimeout(() => {
+        index = (index + 1) % images.length;
+        slide.src = images[index];
+        slide.style.opacity = 1;
+      }, 800);
+    }, 4000);
+  }
 
-/* SLIDESHOW */
-const images = ["img1.jpg", "img2.jpg", "img3.jpg"];
-let imgIndex = 0;
-
-function startSlideshow() {
-  setInterval(() => {
-    slide.style.opacity = 0;
-    setTimeout(() => {
-      imgIndex = (imgIndex + 1) % images.length;
-      slide.src = images[imgIndex];
-      slide.style.opacity = 1;
-    }, 800);
-  }, 4000);
-}
-
-/* TYPING TEXT */
-const message = `Thanks for coming into my life .
+  /* TYPING */
+  const message = `Thanks for coming into my life .
 ni enaku one of the biggest supporter 💕
 best, sweet and cute friend forever 🫶🏻
 Thanks for being with me❣️
@@ -115,24 +114,24 @@ Hey my sugar plum 🥰❤️
 intha careless boy cares you lot and loves you lotttt 💞💝
 Love you midhuuuu ❤️🫂`;
 
-function startTyping() {
-  textEl.innerHTML = "";
-  let i = 0;
-  const typing = setInterval(() => {
-    textEl.innerHTML += message.charAt(i++);
-    if (i >= message.length) {
-      clearInterval(typing);
-      secretBtn.style.display = "inline-block";
-    }
-  }, 40);
-}
+  function startTyping() {
+    textEl.innerHTML = "";
+    let i = 0;
+    const typing = setInterval(() => {
+      textEl.innerHTML += message.charAt(i++);
+      if (i >= message.length) {
+        clearInterval(typing);
+        secretBtn.style.display = "inline-block";
+      }
+    }, 40);
+  }
 
-/* SECRET MESSAGE */
-secretBtn.addEventListener("click", () => {
-  birthdayDiv.style.display = "none";
-  secretDiv.style.display = "flex";
+  /* SECRET */
+  secretBtn.addEventListener("click", () => {
+    birthdayDiv.style.display = "none";
+    secretDiv.style.display = "flex";
 
-  secretText.innerText =
+    secretText.innerText =
 `Midhuuuuu,
 
 I promise you now.
@@ -142,5 +141,7 @@ I am always there for you.
 You are never alone.
 
 Ashooo iruken, irupen epovum 💖`;
+  });
+
 });
 </script>

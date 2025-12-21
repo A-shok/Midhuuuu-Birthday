@@ -143,16 +143,14 @@ function startSlideshow() {
 
 /* ---------- TYPING EFFECT ---------- */
 const message = `
-Thanks for coming into my life as one of the biggest supporter 💕
+Thanks for coming into my life as one of the biggest supporters 💕
 best, sweet and cute friend forever 🫶🏻
-Thanks for being with me❣️
 
-Midhuuuu you are my safe place and my comfort zone lusu 💖
-and my forever person ❤️ 
-eppovum ena vitu poidatha pleasee 🥺🥺
+Midhuuuu you are my safe place, my comfort zone lusu 💖
+and my forever person ❤️ eppovum ena vitu poidatha pleasee 🥺🥺
 
 I’m so grateful for you.
-Hey my sugar plum 🥰❤️
+Hey my sugar plum 🍫💋
 intha careless boy cares you lot and loves you lotttt 💞💝
 Love you midhuuuu ❤️🫂
 `;
@@ -165,4 +163,37 @@ function startTyping() {
   const typing = setInterval(() => {
     el.innerHTML += message.charAt(charIndex);
     charIndex++;
-    if (charIndex >= message.length) clearInterval(typin
+    if (charIndex >= message.length) clearInterval(typing);
+  }, 35);
+}
+
+/* ---------- EMOJI RAIN ---------- */
+const emojis = ["❤️","💕","💖","🍫","💄"];
+
+function startEmojiRain() {
+  setInterval(() => {
+    const e = document.createElement("div");
+    e.className = "emoji";
+    e.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+    e.style.left = Math.random() * 100 + "vw";
+    e.style.fontSize = (18 + Math.random() * 18) + "px";
+    e.style.animationDuration = (4 + Math.random() * 4) + "s";
+    document.body.appendChild(e);
+    setTimeout(() => e.remove(), 8000);
+  }, 250);
+}
+
+/* ---------- BUTTON CLICK ---------- */
+function goSecond() {
+  document.getElementById("first").style.display = "none";
+  document.getElementById("second").style.display = "block";
+  document.getElementById("music").play();
+
+  startSlideshow();
+  startTyping();
+  startEmojiRain();
+}
+</script>
+
+</body>
+</html>

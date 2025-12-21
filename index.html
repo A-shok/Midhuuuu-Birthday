@@ -24,10 +24,7 @@ body{
 }
 
 /* LOGIN */
-#login{
-  background:#000;
-  color:white;
-}
+#login{background:#000;color:white}
 
 /* CANDLE PAGE */
 #candlePage{
@@ -37,18 +34,12 @@ body{
 }
 #candles{
   font-size:70px;
-  margin-bottom:10px;
+  margin-bottom:15px;
   animation:flicker .25s infinite alternate;
 }
 @keyframes flicker{
   from{transform:rotate(-1deg);text-shadow:0 0 8px orange}
   to{transform:rotate(1deg);text-shadow:0 0 15px gold}
-}
-
-/* COUNTDOWN */
-#countdown{
-  font-size:32px;
-  margin-top:10px;
 }
 
 /* DARK SCREEN */
@@ -65,9 +56,7 @@ body{
     url("bg.jpg") center/cover no-repeat;
   color:white;
 }
-#wishPage h1{
-  font-size:36px;
-}
+#wishPage h1{font-size:36px}
 
 .glow-btn{
   margin-top:25px;
@@ -94,7 +83,6 @@ body{
   color:white;
   overflow-y:auto;
 }
-
 .card{
   background:rgba(255,255,255,.97);
   max-width:420px;
@@ -153,15 +141,14 @@ button{
   <input id="username" placeholder="Username">
   <input id="password" type="password" placeholder="Password">
   <div style="font-size:13px;opacity:.8;">Hint: It’s your nickname 😉</div>
-  <button onclick="doLogin()">Continue 💖</button>
+  <button id="loginBtn">Continue 💖</button>
   <div id="error"></div>
 </div>
 
 <!-- CANDLE PAGE -->
 <div id="candlePage" class="center">
   <div id="candles">🕯️🕯️🕯️</div>
-  <div id="countdown"></div>
-  <button onclick="blowCandles()">Blow the candles 🎤</button>
+  <button id="blowBtn">Blow the candles 🎤</button>
 </div>
 
 <!-- DARK SCREEN -->
@@ -170,7 +157,7 @@ button{
 <!-- WISH PAGE -->
 <div id="wishPage" class="center">
   <h1>🎉 Happy Birthday <br> Midhuuuu 🫶🏻❤️</h1>
-  <button class="glow-btn" onclick="openSurprise()">With love Ashoooo 🫶🏻</button>
+  <button class="glow-btn" id="loveBtn">With love Ashoooo ❣️🫶🏻</button>
 </div>
 
 <!-- SLIDESHOW PAGE -->
@@ -184,14 +171,13 @@ button{
 <script>
 "use strict";
 
-/* ELEMENTS (FIXED) */
+/* ELEMENTS */
 const loginDiv = document.getElementById("login");
 const candleDiv = document.getElementById("candlePage");
 const darkDiv = document.getElementById("darkScreen");
 const wishDiv = document.getElementById("wishPage");
 const birthdayDiv = document.getElementById("birthday");
 const candlesEl = document.getElementById("candles");
-const countdownEl = document.getElementById("countdown");
 const slide = document.getElementById("slide");
 const textEl = document.getElementById("text");
 const errorDiv = document.getElementById("error");
@@ -201,7 +187,7 @@ const music = document.getElementById("music");
 const USERNAME="midhuuuu";
 const PASSWORD="forever";
 
-function doLogin(){
+document.getElementById("loginBtn").addEventListener("click", ()=>{
   if(
     document.getElementById("username").value.trim()===USERNAME &&
     document.getElementById("password").value.trim()===PASSWORD
@@ -211,26 +197,18 @@ function doLogin(){
   } else {
     errorDiv.innerText="Try again 😉";
   }
-}
+});
 
-/* CANDLE + COUNTDOWN */
-function blowCandles(){
-  let count=3;
-  countdownEl.innerText=count;
+/* BLOW CANDLES – MOBILE SAFE */
+document.getElementById("blowBtn").addEventListener("click", ()=>{
+  document.getElementById("blowBtn").disabled = true;
 
-  const timer=setInterval(()=>{
-    count--;
-    if(count>0){
-      countdownEl.innerText=count;
-    } else {
-      clearInterval(timer);
-      candlesEl.style.animation="none";
-      candlesEl.innerText="💨";
-      countdownEl.innerText="";
-      setTimeout(showDark,800);
-    }
-  },1000);
-}
+  setTimeout(()=>{
+    candlesEl.style.animation="none";
+    candlesEl.innerText="💨";
+    setTimeout(showDark,800);
+  },3000);
+});
 
 /* DARK → WISH */
 function showDark(){
@@ -243,14 +221,14 @@ function showDark(){
 }
 
 /* WISH → SLIDESHOW */
-function openSurprise(){
+document.getElementById("loveBtn").addEventListener("click", ()=>{
   wishDiv.style.display="none";
   birthdayDiv.style.display="flex";
   music.play();
   startSlideshow();
   startTyping();
   startEmojiRain();
-}
+});
 
 /* SLIDESHOW */
 const imgs=["img1.jpg","img2.jpg","img3.jpg"];
